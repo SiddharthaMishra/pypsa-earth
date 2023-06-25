@@ -1,0 +1,7 @@
+resources/
+results/
+cutouts/
+logs/
+
+tempfile.zip
+.venv/
