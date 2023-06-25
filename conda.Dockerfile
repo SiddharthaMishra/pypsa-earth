@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:23.3.1-0 AS build
+FROM continuumio/miniconda3:23.3.1-0
 RUN apt update && apt install -y --no-install-recommends  git wget curl build-essential default-jre
 
 RUN conda install -c conda-forge mamba

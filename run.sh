@@ -5,8 +5,6 @@ if [ -z $SUBCOMMAND]; then
     exit(1)
 fi
 
-rm config.yaml
-rm configs/*
 conda activate pypsa-earth 
 python container-helpers/download-configs.py
 if [  $SUBCOMMAND = "prepare" ]; then
