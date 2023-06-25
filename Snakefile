@@ -654,6 +654,30 @@ rule prepare_network:
         "scripts/prepare_network.py"
 
 
+rule upload_prepared_network:
+    input:
+        "networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.nc",
+    output:
+        touch("networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done")
+    shell:
+        "python container-helpers/upload-network.py {input} prepared-networks"
+
+
+rule upload_all_prepared_networks:
+    input:
+        expand(
+             "networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done",
+             **config["scenario"]
+        ),
+
+rule upload_solved_network:
+    input:
+        "results/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.nc,
+    output:
+        touch("results/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done")
+    shell:
+        "python container-helpers/upload-network.py {input} solved-networks"
+
 def memory(w):
     factor = 3.0
     for o in w.opts.split("-"):

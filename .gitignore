@@ -54,7 +54,16 @@ notebooks/old_notebooks/*.tif
 doc/_build
 
 # VS code related
-*.vscode
-doc/*.vscode/settings.json
-*.vscode/settings.json
 *.code-workspace
+.vscode
+doc/.vscode/settings.json
+.vscode/settings.json
+resources/regions_onshore.geojson
+resources/regions_offshore.geojson
+resources/regions_onshore.geojson
+resources/regions_onshore.geojson
+resources/regions_offshore.geojson
+resources/regions_onshore.geojson
+resources/regions_offshore.geojson
+
+.venv/
