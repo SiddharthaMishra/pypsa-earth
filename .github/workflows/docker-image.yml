@@ -20,9 +20,9 @@ jobs:
       uses: RafikFarhad/push-to-gcr-github-action@v4.1
       with:
         gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-        registry: europe-west3-docker.pkg.dev/pypsa
+        registry: europe-west3-docker.pkg.dev
         project_id: crucial-oven-386720
-        image_name: pypsa
+        image_name: pypsa/pypsa
         image_tag: ${{ github.sha }}
         dockerfile: ./conda.Dockerfile
         
