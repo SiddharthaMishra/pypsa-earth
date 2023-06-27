@@ -12,3 +12,4 @@ if [  $SUBCOMMAND = "prepare" ]; then
 elif [ $SUBCOMMAND = "run" ]; then
     python container-helpers/download-network.py
     snakemake -j $(nproc --all) upload_solved_network "results/$PREPARED_NETWORK_OPTS.uploaded.done"
+
