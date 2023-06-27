@@ -1,5 +1,6 @@
-FROM continuumio/miniconda3:23.3.1-0
-RUN apt update && apt install -y --no-install-recommends  git wget curl build-essential default-jre
+FROM continuumio/miniconda3:22.11.1
+RUN apt clean && apt update
+RUN apt install -y git wget curl build-essential default-jre
 
 RUN conda install -c conda-forge mamba
 COPY ./envs/pypsa-container.fixed.yaml .
