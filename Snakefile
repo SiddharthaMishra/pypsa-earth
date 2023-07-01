@@ -669,6 +669,10 @@ rule upload_all_prepared_networks:
              "networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done",
              **config["scenario"]
         ),
+    shell:
+        # push list of networks to a file
+        echo -e "{input}" >> "networks/" + RDIR + "uploaded_networks.txt"
+
 
 rule upload_solved_network:
     input:
@@ -926,7 +930,7 @@ rule run_scenario:
             base_config_path = (
                 yaml.full_load(f)
                 .get("run", {})
-                .get("base_config", "config.tutorial.yaml")
+                .get("base_config", "config.default.yaml")
             )
 
             # Ensure the scenario name matches the name of the configuration

@@ -28,6 +28,8 @@ E.g. if a new rule becomes available describe how to use it `snakemake -j1 run_t
 
 * Add codespell linter which corrects word spellings `PR #763 <https://github.com/pypsa-meets-earth/pypsa-earth/pull/763>`__
 
+* Remove RES addition functionality from attach_conventional_generators `PR #769 <https://github.com/pypsa-meets-earth/pypsa-earth/pull/769>`__. Currently wind and solar powerplants stored in powerplants.csv are added to the network by attach_conventional_generators.
+
 PyPSA-Earth 0.2.1
 =================
 
@@ -134,6 +136,8 @@ PyPSA-Earth 0.2.0
 * Fix bug for missing renewable profiles and generators `PR #714 <https://github.com/pypsa-meets-earth/pypsa-earth/pull/714>`__
 
 * Update instructions on how to write documentation. `PR #720 <https://github.com/pypsa-meets-earth/pypsa-earth/pull/720>`__
+
+* Enable workflow to run including countries with empty OSM data, test on all UN countries `PR #701 https://github.com/pypsa-meets-earth/pypsa-earth/pull/701`__
 
 PyPSA-Earth 0.1.0
 =================
