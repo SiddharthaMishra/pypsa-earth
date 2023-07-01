@@ -12,6 +12,10 @@ spec:
     steps:
     - - name: prepare-networks
         template: prepare-networks
+    
+    # - - name: solve-networks
+    #     template: solve-networks
+    #     withParam: "{{steps.prepare-networks.outputs.parameters.prepared_network_opts}}"
     # - - name: solve-networks
     #     template: solve-networks
     #     arguments:
@@ -42,54 +46,45 @@ spec:
       image: "{{ workflow.parameters.pypsa_image_path }}"
       command: ["conda"]
       args: ["run", "-n", "pypsa-earth", "./run.sh"]
-    env:
-      - name: RUN_FOLDER_NAME
-        value: "{{ workflow.parameters.run_folder_name }}"
-      - name: IS_TEST_RUN
-        value: "true"
-      - name: SUBCOMMAND
-        value: "prepare_networks"
-      - name: GOOGLE_APPLICATION_CREDENTIALS
+      env:
+        - name: RUN_FOLDER_NAME
+          value: "{{ workflow.parameters.run_folder_name }}"
+        - name: IS_TEST_RUN
+          value: "true"
+        - name: SUBCOMMAND
+          value: "prepare_networks"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: creds
+              key: GOOGLE_APPLICATION_CREDENTIALS
+    outputs:
+      parameters:
+      - name: prepared_network_opts
         valueFrom:
-          secretKeyRef:
-            name: creds
-            key: GOOGLE_APPLICATION_CREDENTIALS
-      
-  # Fan-out: Operating on each output artifact
-  # Argo iterates over the array generated in the previous step and
-  # passes on one element for each step.
-  - name: fan-out-print
+          path: /tmp/prepared_network_opts.txt
+
+ 
+  - name: solve-networks
     inputs:
       parameters:
-      - name: text
-      artifacts:
-      - name: input
-        path: /tmp/input
-    script:
-      image: python:alpine3.6
-      command: [python]
-      source: |
-        param = "{{inputs.parameters.text}}"
-        with open('/tmp/input', 'r') as f:
-          filecont = f.read()
-        print(f'Param: {param}, file: {filecont}')
-
-  # Fan-in: Combining the artifacts
-  # In this step, we mount the entire folder and can then iterate over
-  # each artifact file. 
-  #
-  # Note: In this example, we only list the output artifact files from
-  # the previous step to validate that all files are present.
-  - name: fan-in
-    inputs:
-      artifacts:
-        - name: artifact-files
-          path: /tmp
-          # Here we are mounting the exact same artifact folder-location
-          # that we wrote into during the fan-out phase.
-          s3:
-            key: fanout-{{workflow.name}}
+      - name: prepared_network_opts
     container:
-      image: alpine:latest
-      command: [sh, -c]
-      args: ["ls /tmp"]
+      image: "{{ workflow.parameters.pypsa_image_path }}"
+      command: ["conda"]
+      args: ["run", "-n", "pypsa-earth", "./run.sh"]
+      env:
+        - name: PREPARED_NETWORK_OPTS
+          value: "{{inputs.parameters.prepared_network_opts}}"
+        - name: RUN_FOLDER_NAME
+          value: "{{ workflow.parameters.run_folder_name }}"
+        - name: IS_TEST_RUN
+          value: "true"
+        - name: SUBCOMMAND
+          value: "run"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: creds
+              key: GOOGLE_APPLICATION_CREDENTIALS
+      

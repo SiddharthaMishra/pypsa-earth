@@ -20,7 +20,7 @@ jobs:
         gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
         registry: europe-central2-docker.pkg.dev
         project_id: crucial-oven-386720
-        image_name: pypsa/pypsa-workflow
+        image_name: pypsa-workflow/pypsa
         image_tag: ${{ github.sha }}
         dockerfile: ./conda.Dockerfile
         

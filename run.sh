@@ -9,7 +9,7 @@ fi
 
 python container-helpers/download-configs.py
 if ! [ $SUBCOMMAND = "prepare" ]; then
-    if [ ! -z $IS_TEST_RUN ]; then
+    if [ $IS_TEST_RUN = "true" ]; then
         python container-helpers/download-test-data.py
     fi
     snakemake -j $(nproc --all) upload_all_prepared_networks

@@ -7,7 +7,7 @@ spec:
   arguments:
     parameters:
       - name: pypsa_image_path
-        value: europe-west3-docker.pkg.dev/crucial-oven-386720/pypsa/pypsa:bc8480d5c916bb1fcd00e4023e9f4eaadf479b94
+        value: europe-west3-docker.pkg.dev/crucial-oven-386720/pypsa/pypsa:9528ac19caba4aba9ff941d90d99250a37c1ff48
       - name: run_folder_name
         value: 649b3bafc4b9a410245af349/64a047cb3c93f93a94a15b42
   templates:
