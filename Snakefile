@@ -669,10 +669,10 @@ rule upload_all_prepared_networks:
              "networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done",
              **config["scenario"]
         ),
-    shell:
-        # push list of networks to a file
-        "echo -e {input} > networks/{RDIR}uploaded_networks.txt && python container-helpers/upload-file.py networks/{RDIR}uploaded_networks.txt prepared-networks" 
-
+    run:
+        with open("networks/all_networks.txt", "w") as f:
+            json.dump(input, f)   shell:
+        
 
 def memory(w):
     factor = 3.0
