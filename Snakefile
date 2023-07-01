@@ -669,6 +669,10 @@ rule upload_all_prepared_networks:
              "networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done",
              **config["scenario"]
         ),
+    shell:
+        # push list of networks to a file
+        echo -e "{input}" >> "networks/" + RDIR + "uploaded_networks.txt"
+
 
 rule upload_solved_network:
     input:

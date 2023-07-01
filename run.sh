@@ -8,6 +8,10 @@ fi
 conda activate pypsa-earth 
 python container-helpers/download-configs.py
 if [  $SUBCOMMAND = "prepare" ]; then
+    if [ -z $IS_TEST_RUN ]; then
+        python container-helpers/download-test-data.py
+    else
+    fi
     snakemake -j $(nproc --all) upload_all_prepared_networks
 elif [ $SUBCOMMAND = "run" ]; then
     python container-helpers/download-network.py
