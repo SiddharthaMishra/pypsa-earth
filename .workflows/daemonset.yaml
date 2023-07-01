@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  namespace: cache
+  name: cache
+spec:
+  selector: 
+    matchLabels:
+      name: cache
+  template:
+    retryStrategy:
+      limit: "10"
+      retryPolicy: "Always"
+    metadata:
+      labels:
+        name: cache
+    spec:
+      containers:
+      - name: cache
+        image: europe-west3-docker.pkg.dev/crucial-oven-386720/pypsa/pypsa:9528ac19caba4aba9ff941d90d99250a37c1ff48
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "sleep 1000" ]
+        resources: 
+          requests:
+            ephemeral-storage: 10Gi
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            ephemeral-storage: 10Gi
+            cpu: 10m
+            memory: 10Mi

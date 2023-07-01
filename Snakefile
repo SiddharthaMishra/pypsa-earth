@@ -671,7 +671,7 @@ rule upload_all_prepared_networks:
         ),
     run:
         with open("networks/all_networks.txt", "w") as f:
-            json.dump(input, f)   shell:
+            json.dump(input, f)
         
 
 def memory(w):
