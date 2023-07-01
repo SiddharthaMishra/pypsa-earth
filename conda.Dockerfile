@@ -3,8 +3,8 @@ RUN apt clean && apt update
 RUN apt install -y git wget curl build-essential default-jre
 
 RUN conda install -c conda-forge mamba
-COPY ./envs/pypsa-container.fixed.yaml .
-RUN mamba env create --file pypsa-container.fixed.yaml -n pypsa-earth
+COPY ./envs/pypsa-earth.yaml .
+RUN mamba env create --file pypsa-earth.yaml -n pypsa-earth
 WORKDIR /pypsa-earth
 RUN conda remove mamba && apt remove -y git gcc build-essential
 COPY . .
