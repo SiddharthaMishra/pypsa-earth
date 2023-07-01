@@ -45,18 +45,23 @@ spec:
     container:
       image: "{{ workflow.parameters.pypsa_image_path }}"
       # image: ubuntu
-      # command: ["bash", "-c"]
-      command: ["conda"]
-      args: ["run", "-n", "pypsa-earth", "./run.sh"]
+      command: ["bash", "-c"]
+      # command: ["conda"]
+      # args: [ "run", "-n", "pypsa-earth", "./run.sh"]
       #sleep in a loop
-      # args: [ "while true; do sleep 30; done;"]
+      args: [ "while true; do sleep 30; done;"]
+      resources:
+        limits:
+          cpu: "5000m"
+          memory: "20Gi"
+          ephemeral-storage: "200Gi"
       env:
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
         - name: IS_TEST_RUN
           value: "true"
         - name: SUBCOMMAND
-          value: "prepare_networks"
+          value: "prepare"
         - name: GOOGLE_APPLICATION_CREDENTIALS
           valueFrom:
             secretKeyRef:
@@ -74,9 +79,12 @@ spec:
       parameters:
       - name: prepared_network_opts
     container:
-      image: "{{ workflow.parameters.pypsa_image_path }}"
-      command: ["conda"]
-      args: ["run", "-n", "pypsa-earth", "./run.sh "]
+      # image: "{{ workflow.parameters.pypsa_image_path }}"
+      # command: ["conda"]
+      # args: ["run", "-n", "pypsa-earth", "./run.sh "]
+      image: ubuntu
+      command: ["bash", "-c"]
+      args: [ "print $PREPARED_NETWORK_OPTS" ]
       env:
         - name: PREPARED_NETWORK_OPTS
           value: "{{inputs.parameters.prepared_network_opts}}"
