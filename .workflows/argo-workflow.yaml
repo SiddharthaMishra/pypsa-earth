@@ -1,0 +1,95 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate  
+metadata:
+  name: pypsa-workflow-template
+spec:
+  ttlStrategy:
+    secondsAfterCompletion: 10000 
+    secondsAfterSuccess: 50000
+    secondsAfterFailure: 500000
+  templates:
+  - name: pypsa-workflow
+    steps:
+    - - name: prepare-networks
+        template: prepare-networks
+    # - - name: solve-networks
+    #     template: solve-networks
+    #     arguments:
+    #       artifacts:
+    #       - name: input
+    #         from: "{{steps.generate.outputs.artifacts.fan-out-artifacts}}"
+    #         subPath: "{{item}}" # <<< This selects a single file from the fan out
+    #       parameters:
+    #       - name: text
+    #         value: "{{item}}"
+    #     # This withParam iterates through the output from the previous step
+    #     withParam: "{{steps.generate.outputs.result}}"
+    # - - name: fan-in
+    #     template: fan-in
+
+  # Step to generate the output sequence
+  #
+  # In this step, we write multiple artifacts to a target-folder on the
+  # artifact directory: fanout-{{workflow.name}}
+  #
+  # In addition, we output the filenames through the python script as a
+  # JSON-complaint array of strings. This will look like so:
+  # ["file1.txt","file2.txt","file3.txt"]
+  #
+  # This array serves as fan-out argument that argo will iterate over.
+  - name: prepare-networks
+    container:
+      image: "{{ workflow.parameters.pypsa_image_path }}"
+      command: ["conda"]
+      args: ["run", "-n", "pypsa-earth", "./run.sh"]
+    env:
+      - name: RUN_FOLDER_NAME
+        value: "{{ workflow.parameters.run_folder_name }}"
+      - name: IS_TEST_RUN
+        value: "true"
+      - name: SUBCOMMAND
+        value: "prepare_networks"
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        valueFrom:
+          secretKeyRef:
+            name: creds
+            key: GOOGLE_APPLICATION_CREDENTIALS
+      
+  # Fan-out: Operating on each output artifact
+  # Argo iterates over the array generated in the previous step and
+  # passes on one element for each step.
+  - name: fan-out-print
+    inputs:
+      parameters:
+      - name: text
+      artifacts:
+      - name: input
+        path: /tmp/input
+    script:
+      image: python:alpine3.6
+      command: [python]
+      source: |
+        param = "{{inputs.parameters.text}}"
+        with open('/tmp/input', 'r') as f:
+          filecont = f.read()
+        print(f'Param: {param}, file: {filecont}')
+
+  # Fan-in: Combining the artifacts
+  # In this step, we mount the entire folder and can then iterate over
+  # each artifact file. 
+  #
+  # Note: In this example, we only list the output artifact files from
+  # the previous step to validate that all files are present.
+  - name: fan-in
+    inputs:
+      artifacts:
+        - name: artifact-files
+          path: /tmp
+          # Here we are mounting the exact same artifact folder-location
+          # that we wrote into during the fan-out phase.
+          s3:
+            key: fanout-{{workflow.name}}
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args: ["ls /tmp"]

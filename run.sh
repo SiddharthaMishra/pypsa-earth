@@ -4,12 +4,12 @@ set -e
 
 if [ -z $SUBCOMMAND]; then
     echo "Please set SUBCOMMAND"
-    exit(1)
+    exit 1
 fi
 
 python container-helpers/download-configs.py
 if ! [ $SUBCOMMAND = "prepare" ]; then
-    if [ -z $IS_TEST_RUN ]; then
+    if [ ! -z $IS_TEST_RUN ]; then
         python container-helpers/download-test-data.py
     fi
     snakemake -j $(nproc --all) upload_all_prepared_networks
