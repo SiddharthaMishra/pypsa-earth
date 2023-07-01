@@ -660,7 +660,7 @@ rule upload_prepared_network:
     output:
         touch("networks/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done")
     shell:
-        "python container-helpers/upload-network.py {input} prepared-networks"
+        "python container-helpers/upload-file.py {input} prepared-networks"
 
 
 rule upload_all_prepared_networks:
@@ -671,16 +671,8 @@ rule upload_all_prepared_networks:
         ),
     shell:
         # push list of networks to a file
-        echo -e "{input}" >> "networks/" + RDIR + "uploaded_networks.txt"
+        "echo -e {input} > networks/{RDIR}uploaded_networks.txt && python container-helpers/upload-file.py networks/{RDIR}uploaded_networks.txt prepared-networks" 
 
-
-rule upload_solved_network:
-    input:
-        "results/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.nc,
-    output:
-        touch("results/" + RDIR + "elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.uploaded.done")
-    shell:
-        "python container-helpers/upload-network.py {input} solved-networks"
 
 def memory(w):
     factor = 3.0

@@ -44,24 +44,11 @@ dependencies:
 - reverse-geocode
 - country_converter
 
-  # Keep in conda environment when calling ipython
-- ipython
-  # Jupyter notebook requirement
-- ipykernel
-- jupyterlab
-
   # GIS dependencies:
 - cartopy
 - descartes
 - rasterio!=1.2.10
 - rioxarray
-
- # Plotting
-- geoviews
-- hvplot
-- graphviz
-- contextily
-- graphviz
 
   # PyPSA-Eur-Sec Dependencies
 - geopy
@@ -82,3 +69,5 @@ dependencies:
   - git+https://github.com/FRESNA/vresutils@master  # until new pip release > 0.3.1 (strictly)
   - tsam>=1.1.0
   - chaospy  # lastest version only available on pip
+  - google-cloud-storage
+  - google-ouath

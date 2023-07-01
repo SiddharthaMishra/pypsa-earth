@@ -14,8 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file conda.Dockerfile --tag pypsa-container:$(date +%s)
     - name: Push to GCR GitHub Action
       uses: RafikFarhad/push-to-gcr-github-action@v4.1
       with:

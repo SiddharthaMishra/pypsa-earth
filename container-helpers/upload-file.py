@@ -17,7 +17,7 @@ def main():
     storage_client = storage.Client(project=project_id, credentials=creds)
     bucket = storage_client.bucket(os.environ.get("BUCKET_NAME", "payment-dashboard")) 
     
-    upload_base = os.environ.get("RUN_FOLDER_NAME", "common")
+    upload_base = os.environ.get("RUN_FOLDER_PATH", "common")
     bucket.blob(f"{upload_base}/{networks_blob_folder}/{file_name}").upload_from_filename(file_path)
 
 if __name__ == "__main__":

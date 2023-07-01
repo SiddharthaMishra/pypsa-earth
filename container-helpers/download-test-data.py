@@ -1,4 +1,5 @@
 import os
+import pathlib
 import json
 from google.oauth2.service_account import Credentials
 from google.cloud import storage
@@ -15,7 +16,9 @@ def main():
         blobs = bucket.list_blobs(prefix=folder_name)  # Get list of files
         for blob in blobs:
             filename = blob.name.split("/")[-1]
-            blob.download_to_filename(folder_name + filename)  # Download
+            blob.download_to_filename(pathlib.Path(".") / folder_name / filename)  # Download
+            print(f"downloaded {filename} to {folder_name}")
+    bucket.blob("config.yaml").download_to_filename("config.yaml")
 
 
 if __name__ == "__main__":
