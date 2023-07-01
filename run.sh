@@ -2,7 +2,7 @@
 
 set -e
 
-if [ -z $SUBCOMMAND]; then
+if [ -z $SUBCOMMAND ]; then
     echo "Please set SUBCOMMAND"
     exit 1
 fi
