@@ -58,8 +58,6 @@ dependencies:
 
 # workflow dependencies
 
-- google-cloud-storage
-- google-ouath
 
   # Cloud download
 # - googledrivedownloader  # Commented until https://github.com/ndrplz/google-drive-downloader/pull/28 is merged: PR installed using pip
@@ -74,4 +72,5 @@ dependencies:
   - git+https://github.com/FRESNA/vresutils@master  # until new pip release > 0.3.1 (strictly)
   - tsam>=1.1.0
   - chaospy  # lastest version only available on pip
-
+  - google-cloud-storage
+  - google-auth
