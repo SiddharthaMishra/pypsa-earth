@@ -10,10 +10,10 @@ def main():
     project_id = os.environ.get("PROJECT_ID", "crucial-oven-386720")
     storage_client = storage.Client(project=project_id, credentials=creds)
     bucket = storage_client.bucket(os.environ.get("BUCKET_NAME", "pypsa-test-data"))
-
+    blob_prefix = os.environ.get("TEST_FOLDER_PREFIX", "")
     for folder_name in ["data", "resources", "cutouts"]:
 
-        blobs = bucket.list_blobs(prefix=folder_name)  # Get list of files
+        blobs = bucket.list_blobs(prefix=f"{blob_prefix}/{folder_name}")  # Get list of files
         for blob in blobs:
             filename = blob.name.split("/")[-1]
             blob.download_to_filename(pathlib.Path(".") / folder_name / filename)  # Download
