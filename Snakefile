@@ -672,7 +672,7 @@ rule upload_all_prepared_networks:
         ),
     run:
         with open("/tmp/all_networks.txt", "w") as f:
-            json.dump(input, f)
+            json.dump([i.split("/")[-1].replace(".uploaded.done", "") for i in input], f)
         
 
 def memory(w):

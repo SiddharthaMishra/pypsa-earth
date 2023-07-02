@@ -52,10 +52,11 @@ spec:
       # - bash
       # - -c
       # - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
-      #sleep in a loop
+      # sleep in a loop
       # args: [ "while true; do sleep 30; done;"]
       image: "{{ workflow.parameters.pypsa_image_path }}"
-      command: ["conda"]
+      # command: ["bash", "-c"]
+      command: [ "conda" ]
       args: [ "run", "--no-capture-output", "-n", "pypsa-earth", "./run.sh"]
       resources:
         limits:
@@ -66,8 +67,8 @@ spec:
       env:
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
-        - name: IS_TEST_RUN
-          value: "false"
+        # - name: IS_TEST_RUN
+        #   value: "false"
         - name: SUBCOMMAND
           value: "prepare"
         - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -104,8 +105,8 @@ spec:
           value: "{{inputs.parameters.prepared_network_opts}}"
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
-        - name: IS_TEST_RUN
-          value: "false"
+        # - name: IS_TEST_RUN
+        #   value: "false"
         - name: SUBCOMMAND
           value: "run"
         - name: GOOGLE_APPLICATION_CREDENTIALS
