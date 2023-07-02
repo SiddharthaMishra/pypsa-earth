@@ -1,0 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pypsa-argo-role-binding
+subjects:
+- namespace: default 
+  kind: ServiceAccount
+  name: pypsa-argo 
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-writer
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pypsa-default-role-binding
+subjects:
+- namespace: default 
+  kind: ServiceAccount
+  name: default 
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-writer

@@ -92,6 +92,11 @@ spec:
       # image: ubuntu
       command: ["bash", "-c"]
       args: [ 'conda run -n pypsa-earth ./run.sh' ]
+      resources:
+        limits:
+          cpu: 8
+          memory: 16Gi
+          ephemeral-storage: 100Gi
       env:
         - name: PREPARED_NETWORK_OPTS
           value: "{{inputs.parameters.prepared_network_opts}}"
