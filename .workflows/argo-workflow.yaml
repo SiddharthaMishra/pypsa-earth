@@ -57,7 +57,6 @@ spec:
       # args: [ "run", "--no-capture-output", "-n", "pypsa-earth", "./run.sh"]
       #sleep in a loop
       # args: [ "while true; do sleep 30; done;"]
-      args: ['']
       resources:
         limits:
           cpu: "5000m"
