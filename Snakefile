@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import json
 import sys
 
 sys.path.append("./scripts")
@@ -670,7 +671,6 @@ rule upload_all_prepared_networks:
              **config["scenario"]
         ),
     run:
-        import json
         with open("networks/all_networks.txt", "w") as f:
             json.dump(input, f)
         

@@ -18,7 +18,7 @@ def main():
             filename = blob.name.split("/")[-1]
             blob.download_to_filename(pathlib.Path(".") / folder_name / filename)  # Download
             print(f"downloaded {filename} to {folder_name}")
-    bucket.blob("config.yaml").download_to_filename("config.yaml")
+    bucket.blob(f"{blob_prefix}/config.yaml").download_to_filename("config.yaml")
 
 
 if __name__ == "__main__":
