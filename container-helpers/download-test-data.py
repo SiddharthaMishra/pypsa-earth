@@ -11,7 +11,7 @@ def main():
     storage_client = storage.Client(project=project_id, credentials=creds)
     bucket = storage_client.bucket(os.environ.get("BUCKET_NAME", "pypsa-test-data"))
     blob_prefix = os.environ.get("TEST_FOLDER_PREFIX", "new_data")
-    if not os.environ["SUBCOMMAND"] == "prepare":
+    if os.environ["SUBCOMMAND"] == "prepare":
         for folder_name in ["data", "resources", "cutouts"]:
             blobs = bucket.list_blobs(prefix=f"{blob_prefix}/{folder_name}/")  # Get list of files
             print(blobs)

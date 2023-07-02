@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: pypsa-workflow-2
+spec:
+  serviceAccountName: pypsa-argo
+  entrypoint: main
+  arguments:
+    parameters:
+      - name: pypsa_image_path
+        value: europe-central2-docker.pkg.dev/crucial-oven-386720/pypsa-workflow/pypsa:960dfc5012719a7a00f8184d8e9714b910c24063 
+      - name: run_folder_name
+        value: 649b3bafc4b9a410245af349/64a0735f5e90f44afc7ecd83
+  templates:
+    - name: main
+      steps:
+        - - name: pypsa-workflow
+            templateRef:
+              name: pypsa-workflow-template
+              template: pypsa-workflow

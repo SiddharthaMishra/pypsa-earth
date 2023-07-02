@@ -671,7 +671,7 @@ rule upload_all_prepared_networks:
              **config["scenario"]
         ),
     run:
-        with open("networks/all_networks.txt", "w") as f:
+        with open("/tmp/all_networks.txt", "w") as f:
             json.dump(input, f)
         
 
