@@ -13,6 +13,7 @@ def main():
     blob_prefix = os.environ.get("TEST_FOLDER_PREFIX", "new_data")
     if os.environ["SUBCOMMAND"] == "prepare":
         for folder_name in ["data", "resources", "cutouts"]:
+            pathlib.Path(folder_name).mkdir(parents=True, exist_ok=True)
             blobs = bucket.list_blobs(prefix=f"{blob_prefix}/{folder_name}/")  # Get list of files
             print(blobs)
             for blob in blobs:

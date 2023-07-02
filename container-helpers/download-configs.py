@@ -12,7 +12,7 @@ def main():
     storage_client = storage.Client(project=project_id, credentials=creds)
     bucket = storage_client.bucket(os.environ.get("BUCKET_NAME", "payment-dashboard"))
 
-    if not os.getenv("IS_TEST_RUN", False):
+    if not os.getenv("IS_TEST_RUN", None) != "true":
         bucket.blob(os.environ["RUN_FOLDER_PATH"] + "/configs/config.yaml").download_to_filename("config.yaml")
     bucket.blob(os.environ["RUN_FOLDER_PATH"] + "/configs/bundle_config.yaml").download_to_filename("configs/bundle_config.yaml")
     bucket.blob(os.environ["RUN_FOLDER_PATH"] + "/configs/powerplantmatching_config.yaml").download_to_filename("configs/powerplantmatching_config.yaml")

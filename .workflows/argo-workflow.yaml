@@ -47,26 +47,27 @@ spec:
   # This array serves as fan-out argument that argo will iterate over.
   - name: prepare-networks
     container:
-      # image: "{{ workflow.parameters.pypsa_image_path }}"
-      image: ubuntu
-      command:
-      - bash
-      - -c
-      - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
-      # command: ["conda"]
-      # args: [ "run", "--no-capture-output", "-n", "pypsa-earth", "./run.sh"]
+      # image: ubuntu
+      # command:
+      # - bash
+      # - -c
+      # - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
       #sleep in a loop
       # args: [ "while true; do sleep 30; done;"]
+      image: "{{ workflow.parameters.pypsa_image_path }}"
+      command: ["conda"]
+      args: [ "run", "--no-capture-output", "-n", "pypsa-earth", "./run.sh"]
       resources:
         limits:
           cpu: "5000m"
           memory: "20Gi"
           ephemeral-storage: "200Gi"
+
       env:
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
         - name: IS_TEST_RUN
-          value: "true"
+          value: "false"
         - name: SUBCOMMAND
           value: "prepare"
         - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -90,8 +91,9 @@ spec:
       # command: ["conda"]
       # args: ["run", "-n", "pypsa-earth", "./run.sh "]
       # image: ubuntu
+      # args: [ "while true; do sleep 30; done;"]
       command: ["bash", "-c"]
-      args: [ 'conda run -n pypsa-earth ./run.sh' ]
+      args: [ 'mkdir -p networks && conda run --no-capture-output -n pypsa-earth ./run.sh' ]
       resources:
         limits:
           cpu: 8
@@ -103,7 +105,7 @@ spec:
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
         - name: IS_TEST_RUN
-          value: "true"
+          value: "false"
         - name: SUBCOMMAND
           value: "run"
         - name: GOOGLE_APPLICATION_CREDENTIALS
