@@ -27,26 +27,22 @@ spec:
   - name: prepare-networks
     container:
       # image: ubuntu
-      command:
-      - bash
-      - -c
-      - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
+      # command:
+      # - bash
+      # - -c
+      # - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
       # sleep in a loop
       # args: [ "while true; do sleep 30; done;"]
       image: "{{ workflow.parameters.pypsa_image_path }}"
       # command: ["bash", "-c"]
-      # command: [ "conda" ]
+      command: [ "conda" ]
       args: [ "run", "--no-capture-output", "-n", "pypsa-earth", "./run.sh"]
       resources:
-        # limits:
-        #   cpu: "5000m"
-        #   memory: "20Gi"
-        #   ephemeral-storage: "200Gi"
-
         limits:
-          cpu: "500m"
-          memory: "1Gi"
-          ephemeral-storage: "2Gi"
+          cpu: "5000m"
+          memory: "20Gi"
+          ephemeral-storage: "200Gi"
+
       env:
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
@@ -75,9 +71,9 @@ spec:
       # command: ["conda"]
       # args: ["run", "-n", "pypsa-earth", "./run.sh "]
       # image: ubuntu
-      args: [ "while true; do sleep 30; done;"]
+      # args: [ "while true; do sleep 30; done;"]
       command: ["bash", "-c"]
-      # args: [ 'mkdir -p networks && conda run --no-capture-output -n pypsa-earth ./run.sh' ]
+      args: [ 'mkdir -p networks && conda run --no-capture-output -n pypsa-earth ./run.sh' ]
       resources:
         limits:
           cpu: 4
@@ -104,7 +100,7 @@ spec:
         - "bash"
         - "-c"
         - |
-          echo "mongo \"$MONGO_CONNSTRING\" --eval 'db.jobs.updateOne({_id: ObjectId(\"$TASK_ID\")}, {\$set: {\"status\": \"completed\"}})'"
+          "mongo \"$MONGO_CONNSTRING\" --eval 'db.jobs.updateOne({_id: ObjectId(\"$TASK_ID\")}, {\$set: {\"status\": \"completed\"}})'"
       env:
         - name: MONGO_CONNSTRING
           valueFrom:
