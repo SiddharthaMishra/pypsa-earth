@@ -13,9 +13,9 @@ spec:
     - - name: prepare-networks
         template: prepare-networks
     
-    # - - name: solve-networks
-    #     template: solve-networks
-    #     withParam: "{{steps.prepare-networks.outputs.parameters.prepared_network_opts}}"
+    - - name: solve-networks
+        template: solve-networks
+        withParam: "{{steps.prepare-networks.outputs.parameters.prepared_network_opts}}"
     # - - name: solve-networks
     #     template: solve-networks
     #     arguments:
@@ -45,11 +45,11 @@ spec:
     container:
       image: "{{ workflow.parameters.pypsa_image_path }}"
       # image: ubuntu
-      command: ["bash", "-c"]
-      # command: ["conda"]
-      # args: [ "run", "-n", "pypsa-earth", "./run.sh"]
+      # command: ["bash", "-c"]
+      command: ["conda"]
+      args: [ "run", "-n", "pypsa-earth", "./run.sh"]
       #sleep in a loop
-      args: [ "while true; do sleep 30; done;"]
+      # args: [ "while true; do sleep 30; done;"]
       resources:
         limits:
           cpu: "5000m"

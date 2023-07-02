@@ -8,12 +8,12 @@ if [ -z "$SUBCOMMAND" ]; then
 fi
 
 python container-helpers/download-configs.py
+if [ "$IS_TEST_RUN" = "true" ]; then
+    echo found test
+    mkdir -p cutouts data resources
+    python container-helpers/download-test-data.py
+fi
 if [ "$SUBCOMMAND" = "prepare" ]; then
-    if [ "$IS_TEST_RUN" = "true" ]; then
-        echo found test
-        mkdir -p cutouts data resources
-        python container-helpers/download-test-data.py
-    fi
     snakemake -j $(nproc --all) upload_all_prepared_networks
 elif [ "$SUBCOMMAND" = "run" ]; then
     python container-helpers/download-network.py
