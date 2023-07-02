@@ -17,6 +17,6 @@ if [ "$SUBCOMMAND" = "prepare" ]; then
     snakemake -j $(nproc --all) upload_all_prepared_networks
 elif [ "$SUBCOMMAND" = "run" ]; then
     python container-helpers/download-network.py
-    snakemake -j $(nproc --all) "results/networks/$PREPARED_NETWORK_OPTS.nc"
+    snakemake --allowed-rules solve_network -j $(nproc --all) "results/networks/$PREPARED_NETWORK_OPTS.nc"
     python container-helpers/upload-file.py "results/networks/$PREPARED_NETWORK_OPTS.nc" solved-networks
 fi

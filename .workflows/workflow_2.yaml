@@ -8,9 +8,11 @@ spec:
   arguments:
     parameters:
       - name: pypsa_image_path
-        value: europe-central2-docker.pkg.dev/crucial-oven-386720/pypsa-workflow/pypsa:e20599ceba1570a2b971b0b58c088adef0326353
+        value: europe-central2-docker.pkg.dev/crucial-oven-386720/pypsa-workflow/pypsa:cecb9feaa862cb7cd00a9861a76d9a3c4c67a6e4
       - name: run_folder_name
         value: 649b3bafc4b9a410245af349/64a0735f5e90f44afc7ecd83
+      - name: run_order_id
+        value: 64a0735f5e90f44afc7ecd83
   templates:
     - name: main
       steps:

@@ -20,50 +20,33 @@ spec:
             - name: prepared_network_opts
               value: "{{item}}"
         withParam: "{{steps.prepare-networks.outputs.parameters.prepared_network_opts}}"
-    # - - name: solve-networks
-    #     template: solve-networks
-    #     arguments:
-    #       artifacts:
-    #       - name: input
-    #         from: "{{steps.generate.outputs.artifacts.fan-out-artifacts}}"
-    #         subPath: "{{item}}" # <<< This selects a single file from the fan out
-    #       parameters:
-    #       - name: text
-    #         value: "{{item}}"
-    #     # This withParam iterates through the output from the previous step
-    #     withParam: "{{steps.generate.outputs.result}}"
-    # - - name: fan-in
-    #     template: fan-in
+    
+    - - name: update-order-mongo
+        template: update-order-mongo
 
-  # Step to generate the output sequence
-  #
-  # In this step, we write multiple artifacts to a target-folder on the
-  # artifact directory: fanout-{{workflow.name}}
-  #
-  # In addition, we output the filenames through the python script as a
-  # JSON-complaint array of strings. This will look like so:
-  # ["file1.txt","file2.txt","file3.txt"]
-  #
-  # This array serves as fan-out argument that argo will iterate over.
   - name: prepare-networks
     container:
       # image: ubuntu
-      # command:
-      # - bash
-      # - -c
-      # - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
+      command:
+      - bash
+      - -c
+      - mkdir networks ; echo [\"elec_s_4_ec_lcopt_Co2L-3H\", \"elec_s_6_ec_lcopt_Co2L-3H\", \"elec_s_4_ec_lcopt_Co2L-4H\", \"elec_s_6_ec_lcopt_Co2L-4H\"] >> /tmp/all_networks.txt
       # sleep in a loop
       # args: [ "while true; do sleep 30; done;"]
       image: "{{ workflow.parameters.pypsa_image_path }}"
       # command: ["bash", "-c"]
-      command: [ "conda" ]
+      # command: [ "conda" ]
       args: [ "run", "--no-capture-output", "-n", "pypsa-earth", "./run.sh"]
       resources:
-        limits:
-          cpu: "5000m"
-          memory: "20Gi"
-          ephemeral-storage: "200Gi"
+        # limits:
+        #   cpu: "5000m"
+        #   memory: "20Gi"
+        #   ephemeral-storage: "200Gi"
 
+        limits:
+          cpu: "500m"
+          memory: "1Gi"
+          ephemeral-storage: "2Gi"
       env:
         - name: RUN_FOLDER_PATH
           value: "{{ workflow.parameters.run_folder_name }}"
@@ -92,14 +75,14 @@ spec:
       # command: ["conda"]
       # args: ["run", "-n", "pypsa-earth", "./run.sh "]
       # image: ubuntu
-      # args: [ "while true; do sleep 30; done;"]
+      args: [ "while true; do sleep 30; done;"]
       command: ["bash", "-c"]
-      args: [ 'mkdir -p networks && conda run --no-capture-output -n pypsa-earth ./run.sh' ]
+      # args: [ 'mkdir -p networks && conda run --no-capture-output -n pypsa-earth ./run.sh' ]
       resources:
         limits:
-          cpu: 8
-          memory: 16Gi
-          ephemeral-storage: 100Gi
+          cpu: 4
+          memory: 8Gi
+          ephemeral-storage: 50Gi
       env:
         - name: PREPARED_NETWORK_OPTS
           value: "{{inputs.parameters.prepared_network_opts}}"
@@ -115,8 +98,18 @@ spec:
               name: creds
               key: GOOGLE_APPLICATION_CREDENTIALS
   - name: update-order-mongo
-    containers:
+    container:
       image: mongo:latest 
-      command: ["mongo"]
-      args: ['$MONGO_CONNSTRING', '--eval', 'db.orders.updateOne({_id: "$RUN_FOLDER_NAME"}, {$set: {status: "completed"}})']
-      
+      command:
+        - "bash"
+        - "-c"
+        - |
+          echo "mongo \"$MONGO_CONNSTRING\" --eval 'db.jobs.updateOne({_id: ObjectId(\"$TASK_ID\")}, {\$set: {\"status\": \"completed\"}})'"
+      env:
+        - name: MONGO_CONNSTRING
+          valueFrom:
+          secretKeyRef:
+            name: creds
+            key: MONGO_URI
+        - name: TASK_ID
+          value: "{{workflow.parameters.run_order_id}}" 

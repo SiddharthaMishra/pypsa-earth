@@ -11,6 +11,7 @@ def main():
     bucket = storage_client.bucket(os.environ.get("BUCKET_NAME", "payment-dashboard"))
 
     bucket.blob(f"{os.environ['RUN_FOLDER_PATH']}/prepared-networks/{os.environ['PREPARED_NETWORK_OPTS']}.nc").download_to_filename(f"networks/{os.environ['PREPARED_NETWORK_OPTS']}.nc")
+    print(f"downloaded {os.environ['PREPARED_NETWORK_OPTS']}.nc to networks/")
 
 if __name__ == "__main__":
     main()
