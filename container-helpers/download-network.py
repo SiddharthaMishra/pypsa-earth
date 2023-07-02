@@ -10,7 +10,7 @@ def main():
     storage_client = storage.Client(project=project_id, credentials=creds)
     bucket = storage_client.bucket(os.environ.get("BUCKET_NAME", "payment-dashboard"))
 
-    bucket.blob(f"{os.environ['RUN_FOLDER_PATH']}/prepared_networks/{os.environ['PREPARED_NETWORK_OPTS']}.nc").download_to_filename(f"networks/{os.environ['PREPARED_NETWORK_OPTS']}.nc")
+    bucket.blob(f"{os.environ['RUN_FOLDER_PATH']}/prepared-networks/{os.environ['PREPARED_NETWORK_OPTS']}.nc").download_to_filename(f"networks/{os.environ['PREPARED_NETWORK_OPTS']}.nc")
 
 if __name__ == "__main__":
     main()
